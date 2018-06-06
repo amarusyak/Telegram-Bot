@@ -3,12 +3,13 @@ Use this token to access the Telegram HTTP API:
 490322267:AAGLZz4UaTSsUPnxEzMlDxX-jowpTa4qp4o
 ```
 
+----------
 
 Check URL:
 ```
 https://api.telegram.org/bot490322267:AAGLZz4UaTSsUPnxEzMlDxX-jowpTa4qp4o/getMe
 ```
-----------
+
 Response example:
 ```
 {
@@ -22,6 +23,7 @@ Response example:
 }
 ```
 
+----------
 
 Server IP:
 ```
