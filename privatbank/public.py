@@ -17,3 +17,13 @@ class PublicAPI(object):
         response = get(url, params)
         response.raise_for_status()
         return response.json()
+
+    @staticmethod
+    def serialize_response(response):
+        base_str = ("{currency}\n"
+                    "    Buy: {buy}\n"
+                    "    Sale: {sale}\n\n")
+        return ''.join([base_str.format(currency=item['ccy'],
+                                        buy=item['buy'],
+                                        sale=item['sale'])
+                        for item in response])

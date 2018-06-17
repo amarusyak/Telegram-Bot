@@ -1,36 +1,35 @@
-import cherrypy
+import json
 import config
 import telebot
+
+from privatbank.public import PublicAPI
 
 
 bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
 
 
-@bot.message_handler(func=lambda message: True, content_types=["text"])
-def repeat_all_messages(message):
-    bot.reply_to(message, message.text)
+# Handle '/start'
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    bot.send_message(message.chat.id,
+                     "Hi there, I am a simple bot that is going to help you "
+                     "with some trivial tasks. Please, send '/help' to get "
+                     "a list of a valid commands.")
 
 
-class WebhookServer(object):
-    @cherrypy.expose
-    def index(self):
-        if 'content-length' in (cherrypy.request.headers
-                                and 'content-type' in cherrypy.request.headers
-                                and cherrypy.request.headers['content-type'] ==
-                                    'application/json'):
-            length = int(cherrypy.request.headers['content-length'])
-            json_string = cherrypy.request.body.read(length).decode("utf-8")
-            update = telebot.types.Update.de_json(json_string)
-            bot.process_new_updates([update])
-            return ''
-        else:
-            raise cherrypy.HTTPError(403)
+# Handle '/help'
+@bot.message_handler(commands=['help'])
+def send_instructions(message):
+    bot.send_message(message.chat.id, json.dumps(config.ENDPOINTS))
+
+
+# Handle '/kurs'
+@bot.message_handler(commands=['kurs'])
+def show_exchange_rate(message):
+    privatbank_api = PublicAPI()
+    response = privatbank_api.get_current_courses()
+    bot.reply_to(message, privatbank_api.serialize_response(response))
 
 
 if __name__ == '__main__':
-    bot.remove_webhook()
-    with open(config.WEBHOOK_SSL_CERT, 'r') as ssl_cert:
-        bot.set_webhook(url=(config.WEBHOOK_URL_BASE + config.WEBHOOK_URL_PATH),
-                        certificate=ssl_cert)
-    cherrypy.quickstart(WebhookServer(), config.WEBHOOK_URL_PATH, {'/': {}})
-    # bot.polling(none_stop=True)
+    bot.polling(none_stop=True)
