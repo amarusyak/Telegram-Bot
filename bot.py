@@ -2,7 +2,8 @@ import json
 import config
 import telebot
 
-from privatbank.public import PublicAPI
+from open_weather_map.public import WeatherPublicAPI
+from privatbank.public import BankPublicAPI
 
 
 bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
@@ -26,9 +27,37 @@ def send_instructions(message):
 # Handle '/kurs'
 @bot.message_handler(commands=['kurs'])
 def show_exchange_rate(message):
-    privatbank_api = PublicAPI()
+    privatbank_api = BankPublicAPI()
     response = privatbank_api.get_current_courses()
     bot.reply_to(message, privatbank_api.serialize_response(response))
+
+
+# Handle '/weather'
+@bot.message_handler(commands=['weather'])
+def show_weather(message):
+    """
+    Message example - "/weather in <city>"
+    """
+    city = message.text[12:]
+    if not city:
+        city = 'Lviv'
+
+    with open("data/city_list.txt", 'r') as city_list:
+        all_cities = city_list.read().split()
+
+    if city.title() not in all_cities:
+        bot.reply_to(message, "Incorrect city name - '{}'!".format(city))
+    else:
+        weather_api = WeatherPublicAPI()
+        response = weather_api.get_todays_weather(city)
+        bot.reply_to(message, weather_api.serialize_response(response))
+
+
+# Handle all other messages
+@bot.message_handler(func=lambda message: True, content_types=['text'])
+def echo_message(message):
+    bot.reply_to(message, "Incorrect command. "
+                          "Use '/help' to list a valid commands for the bot.")
 
 
 if __name__ == '__main__':

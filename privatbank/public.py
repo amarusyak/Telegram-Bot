@@ -2,7 +2,7 @@ from requests import get
 import config
 
 
-class PublicAPI(object):
+class BankPublicAPI(object):
     def __init__(self):
         self.base = config.PRIVAT_BASE_URL
 
