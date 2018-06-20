@@ -1,9 +1,9 @@
-import json
 import config
 import telebot
 
 from open_weather_map.public import WeatherPublicAPI
 from privatbank.public import BankPublicAPI
+from transport_info.public import TransportInfoAPI
 
 
 bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
@@ -14,14 +14,15 @@ bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
 def send_welcome(message):
     bot.send_message(message.chat.id,
                      "Hi there, I am a simple bot that is going to help you "
-                     "with some trivial tasks. Please, send '/help' to get "
-                     "a list of a valid commands.")
+                     "with some trivial, but helpful tasks.\n"
+                     "Please, send '/help' to get a list of a valid commands.")
 
 
 # Handle '/help'
 @bot.message_handler(commands=['help'])
 def send_instructions(message):
-    bot.send_message(message.chat.id, json.dumps(config.ENDPOINTS))
+    bot.send_message(message.chat.id, '\n'.join(
+        [key + ': ' + config.ENDPOINTS[key] for key in config.ENDPOINTS]))
 
 
 # Handle '/kurs'
@@ -51,6 +52,20 @@ def show_weather(message):
         weather_api = WeatherPublicAPI()
         response = weather_api.get_todays_weather(city)
         bot.reply_to(message, weather_api.serialize_response(response))
+
+
+# Handle '/stop_info'
+@bot.message_handler(commands=['stop_info'])
+def show_exchange_rate(message):
+    stop = message.text[11:]
+    if not stop:
+        bot.reply_to(message, "Warning: Enter stop code!")
+    elif not stop.isdigit():
+        bot.reply_to(message, "Incorrect stop code - '{}'".format(stop))
+    else:
+        t_info = TransportInfoAPI()
+        response = t_info.get_stop_info(stop)
+        bot.reply_to(message, t_info.serialize_response(response))
 
 
 # Handle all other messages
