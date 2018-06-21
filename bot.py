@@ -30,7 +30,8 @@ def send_instructions(message):
 def show_exchange_rate(message):
     privatbank_api = BankPublicAPI()
     response = privatbank_api.get_current_courses()
-    bot.reply_to(message, privatbank_api.serialize_response(response))
+    bot.reply_to(message, "(c) Privat Bank\n\n" +
+                 privatbank_api.serialize_response(response))
 
 
 # Handle '/weather'

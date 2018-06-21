@@ -20,13 +20,13 @@ class TransportInfoAPI(object):
             name = item.get('RouteName')
             time_to = self.int_secs_to_time(item.get('TimeToPoint'))
             normalized_item = {
-                "Rout name": repr(name),
+                "Route name": repr(name),
                 "Time to wait": str(time_to)
             }
             normalized_data.append(normalized_item)
 
         return '\n\n'.join(
-            ["Rout name: " + item.get("Rout name") + '\n' +
+            ["Route name: " + item.get("Route name") + '\n' +
              "Time to wait: " + item.get("Time to wait")
              for item in normalized_data]
         ) if normalized_data else "No data was found..."
