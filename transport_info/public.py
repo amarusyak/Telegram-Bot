@@ -6,11 +6,12 @@ import config
 
 
 class TransportInfoAPI(object):
-    @staticmethod
-    def get_stop_info(stop_code):
-        url = config.TRANSPORT_BASE_URL + config.ALL_STOPS_ENDPOINT
+    def __init__(self):
+        self._url = config.TRANSPORT_BASE_URL + config.ALL_STOPS_ENDPOINT
+
+    def get_stop_info(self, stop_code):
         params = {'code': stop_code}
-        response = get(url, params)
+        response = get(self._url, params)
         response.raise_for_status()
         return json.loads(response.json())
 
@@ -33,3 +34,7 @@ class TransportInfoAPI(object):
     @staticmethod
     def int_seconds_to_str_time(sec):
         return str(int(sec / 60)) + ' m, ' + str(sec % 60) + ' s'
+
+    @staticmethod
+    def unify_stop_code(stop_code):
+        return '0' * (4 - len(stop_code)) + stop_code
