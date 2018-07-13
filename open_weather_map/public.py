@@ -27,7 +27,7 @@ class WeatherPublicAPI(object):
         return ''.join([base_str.format(
             datetime=item['dt_txt'],
             weather=item['weather'][0]['description'].capitalize(),
-            temp=str(int(round(item['main']['temp'] - 273))) + ' C',
-            p=str(item['main']['pressure']) + ' P')
+            temp=str(int(round(item['main']['temp'] - 273))) + ' \xb0C',
+            p=str(item['main']['pressure']) + ' Pa')
                 for item in applicable_data]
         )

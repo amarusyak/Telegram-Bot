@@ -61,7 +61,7 @@ def show_exchange_rate(message):
     stop = message.text[10:]
     if not stop:
         bot.reply_to(message, "Warning: Enter stop code!")
-    elif not stop.isdigit():
+    elif not stop.isdigit() or len(stop) > 4:
         bot.reply_to(message, "Incorrect stop code - '{}'".format(stop))
     else:
         t_info = TransportInfoAPI()
