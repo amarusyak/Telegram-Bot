@@ -28,6 +28,6 @@ class WeatherPublicAPI(object):
             datetime=item['dt_txt'],
             weather=item['weather'][0]['description'].capitalize(),
             temp=str(int(round(item['main']['temp'] - 273))) + ' C',
-            p=str(item['main']['pressure'])) + ' P'
+            p=str(item['main']['pressure']) + ' P')
                 for item in applicable_data]
         )

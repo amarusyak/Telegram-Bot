@@ -55,7 +55,7 @@ def show_weather(message):
         bot.reply_to(message, weather_api.serialize_response(response))
 
 
-# Handle '/stop_info'
+# Handle '/stopinfo'
 @bot.message_handler(commands=['stopinfo'])
 def show_exchange_rate(message):
     stop = message.text[10:]
@@ -65,7 +65,8 @@ def show_exchange_rate(message):
         bot.reply_to(message, "Incorrect stop code - '{}'".format(stop))
     else:
         t_info = TransportInfoAPI()
-        response = t_info.get_stop_info(stop)
+        u_stop = t_info.unify_stop_code(stop) if len(stop) is not 4 else stop
+        response = t_info.get_stop_info(u_stop)
         bot.reply_to(message, t_info.serialize_response(response))
 
 
