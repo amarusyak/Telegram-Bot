@@ -4,11 +4,11 @@ import config
 
 class BankPublicAPI(object):
     def __init__(self):
-        self.base = config.PRIVAT_BASE_URL
+        self._base = config.PRIVAT_BASE_URL
 
     def get_current_courses(self):
         endpoint = '/pubinfo'
-        url = self.base + endpoint
+        url = self._base + endpoint
         params = {
             'json': True,
             'exchange': True,

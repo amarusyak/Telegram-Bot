@@ -13,8 +13,8 @@ bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
 @bot.message_handler(commands=['start'])
 def send_welcome(message):
     bot.send_message(message.chat.id,
-                     "Hi there, I am a simple bot that is going to help you "
-                     "with some trivial, but helpful tasks.\n"
+                     "Hi there! I am a simple bot that is going to help you "
+                     "with some trivial, but really helpful tasks :)\n"
                      "Please, send '/help' to get a list of a valid commands.")
 
 
@@ -56,9 +56,9 @@ def show_weather(message):
 
 
 # Handle '/stop_info'
-@bot.message_handler(commands=['stop_info'])
+@bot.message_handler(commands=['stopinfo'])
 def show_exchange_rate(message):
-    stop = message.text[11:]
+    stop = message.text[10:]
     if not stop:
         bot.reply_to(message, "Warning: Enter stop code!")
     elif not stop.isdigit():
@@ -73,7 +73,7 @@ def show_exchange_rate(message):
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 def echo_message(message):
     bot.reply_to(message, "Incorrect command. "
-                          "Use '/help' to list a valid commands for the bot.")
+                          "Use '/help' to list a valid commands for this bot.")
 
 
 if __name__ == '__main__':

@@ -1,13 +1,16 @@
 from requests import get
+
 import config
 
 
 class WeatherPublicAPI(object):
-    @staticmethod
-    def get_todays_weather(city):
+    def __init__(self):
+        self._key = config.WEATHER_API_KEY
+
+    def get_todays_weather(self, city):
         params = {
             'q': city,
-            'appid': config.WEATHER_API_KEY
+            'appid': self._key
         }
         response = get(config.WEATHER_BASE_URL, params)
         response.raise_for_status()
@@ -24,7 +27,7 @@ class WeatherPublicAPI(object):
         return ''.join([base_str.format(
             datetime=item['dt_txt'],
             weather=item['weather'][0]['description'].capitalize(),
-            temp=str(int(round(item['main']['temp'] - 273))),
-            p=str(item['main']['pressure']))
+            temp=str(int(round(item['main']['temp'] - 273))) + ' C',
+            p=str(item['main']['pressure'])) + ' P'
                 for item in applicable_data]
         )
