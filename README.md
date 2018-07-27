@@ -6,6 +6,17 @@ Helpful bot for managing trivial tasks really quickly!
 
 ----------
 
+**For local execution:**
+
+git clone https://github.com/<username>/Telegram-Bot.git
+cd Telegram-Bot
+pip install -r requirements.txt
+python bot.py
+
+_Note:_ logs are placed in ./logs/bot.log
+
+----------
+
 Deployed on Heroku:
 https://devcenter.heroku.com/articles/getting-started-with-python#introduction
 

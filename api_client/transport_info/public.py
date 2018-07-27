@@ -1,19 +1,17 @@
 import json
 
-from requests import get
-
 import config
 
 
-class TransportInfoAPI(object):
-    def __init__(self):
+class TransportInfoAPI:
+    def __init__(self, client):
+        self._client = client
         self._url = config.TRANSPORT_BASE_URL + config.ALL_STOPS_ENDPOINT
 
     def get_stop_info(self, stop_code):
         params = {'code': stop_code}
-        response = get(self._url, params)
-        response.raise_for_status()
-        return json.loads(response.json())
+        response = self._client.make_call('get', self._url, params)
+        return json.loads(response)
 
     def serialize_response(self, response):
         normalized_data = list()

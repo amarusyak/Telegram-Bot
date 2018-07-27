@@ -1,4 +1,5 @@
 from collections import OrderedDict
+from os import getcwd
 from yaml import load
 
 
@@ -16,6 +17,7 @@ ENDPOINTS = OrderedDict(sorted({
     "5) /stopinfo": "Shows information about all vehicles that will "
                     "arrive on certain stop"
 }.items()))
+LOG_FILE_LOCATION = getcwd() + "/logs/bot.log"
 
 # PrivatBank:
 PRIVAT_BASE_URL = "https://api.privatbank.ua/p24api"

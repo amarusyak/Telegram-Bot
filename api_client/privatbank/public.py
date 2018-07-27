@@ -1,9 +1,9 @@
-from requests import get
 import config
 
 
-class BankPublicAPI(object):
-    def __init__(self):
+class BankPublicAPI:
+    def __init__(self, client):
+        self._client = client
         self._base = config.PRIVAT_BASE_URL
 
     def get_current_courses(self):
@@ -14,9 +14,7 @@ class BankPublicAPI(object):
             'exchange': True,
             'coursid': 5
         }
-        response = get(url, params)
-        response.raise_for_status()
-        return response.json()
+        return self._client.make_call('get', url, params)
 
     @staticmethod
     def serialize_response(response):
