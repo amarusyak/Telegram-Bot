@@ -1,10 +1,9 @@
-from requests import get
-
 import config
 
 
-class WeatherPublicAPI(object):
-    def __init__(self):
+class WeatherPublicAPI:
+    def __init__(self, client):
+        self._client = client
         self._key = config.WEATHER_API_KEY
 
     def get_todays_weather(self, city):
@@ -12,9 +11,7 @@ class WeatherPublicAPI(object):
             'q': city,
             'appid': self._key
         }
-        response = get(config.WEATHER_BASE_URL, params)
-        response.raise_for_status()
-        return response.json()
+        return self._client.make_call('get', config.WEATHER_BASE_URL, params)
 
     @staticmethod
     def serialize_response(response):
