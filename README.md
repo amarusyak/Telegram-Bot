@@ -8,11 +8,12 @@ Helpful bot for managing trivial tasks really quickly!
 
 **For local execution:**
 
+```bash
 git clone https://github.com/<username>/Telegram-Bot.git
 cd Telegram-Bot
 pip install -r requirements.txt
 python bot.py
-
+```
 _Note:_ logs are placed in ./logs/bot.log
 
 ----------
