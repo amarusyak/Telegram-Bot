@@ -14,14 +14,18 @@ class BankPublicAPI:
             'exchange': True,
             'coursid': 5
         }
-        return self._client.make_call('get', url, params)
+        return self._client.make_call(method='get',
+                                      request=url,
+                                      params=params)
 
     @staticmethod
     def serialize_response(response):
         base_str = ("{currency}\n"
-                    "    Buy: {buy}\n"
-                    "    Sale: {sale}\n\n")
+                    "    Buy: {buy} {base_ccy}\n"
+                    "    Sale: {sale} {base_ccy}\n\n")
         return ''.join([base_str.format(currency=item['ccy'],
                                         buy=item['buy'],
-                                        sale=item['sale'])
+                                        sale=item['sale'],
+                                        base_ccy='UAH' if item['ccy'] != 'BTC'
+                                            else 'USD')
                         for item in response])

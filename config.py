@@ -17,7 +17,11 @@ ENDPOINTS = OrderedDict(sorted({
     "5) /stopinfo": "Shows information about all vehicles that will "
                     "arrive on certain stop"
 }.items()))
-LOG_FILE_LOCATION = getcwd() + "/logs/bot.log"
+DEFAULT_REQUEST_HEADERS = {
+    "Accept": "application/json",
+    "Content-Type": "application/json; charset=utf-8"
+}
+LOG_FILE_LOCATION = getcwd() + "/logs/"
 
 # PrivatBank:
 PRIVAT_BASE_URL = "https://api.privatbank.ua/p24api"

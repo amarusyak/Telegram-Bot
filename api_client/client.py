@@ -1,6 +1,10 @@
 import requests
+import config
+import curlify
 
 from logger.logger import Logger
+
+requests.packages.urllib3.disable_warnings()
 
 
 class Client:
@@ -16,11 +20,11 @@ class Client:
                                  headers=headers,
                                  params=params)
 
-    def post(self, url, headers, data):
+    def post(self, url, headers, params):
         return self._session.post(url=url,
                                   verify=False,
                                   headers=headers,
-                                  data=data)
+                                  data=params)
 
     def put(self, url, headers, params):
         return self._session.put(url=url,
@@ -35,15 +39,22 @@ class Client:
                                  params=params)
 
     # Unified HTTP call method
-    def make_call(self, method, request, params):
+    def make_call(self, method, request, params,
+                  headers=config.DEFAULT_REQUEST_HEADERS):
         http_method = getattr(self, method)
-        response = http_method(request, params)
+        headers.update(headers if headers else None)
+        response = http_method(url=request, headers=headers, params=params)
 
         try:
             response.raise_for_status()
         except requests.RequestException as e:
             logger = Logger()
-            logger.log(http_method)
-            logger.log(e)
+            logger.log('\n'.join([
+                "Details:",
+                "Request: " + curlify.to_curl(response.request),
+                "Response status: " + str(response.status_code),
+                "Response: " + response.text,
+                "Python Exception: " + str(e) + '\n'
+            ]))
 
         return response.json()

@@ -11,7 +11,9 @@ class WeatherPublicAPI:
             'q': city,
             'appid': self._key
         }
-        return self._client.make_call('get', config.WEATHER_BASE_URL, params)
+        return self._client.make_call(method='get',
+                                      request=config.WEATHER_BASE_URL,
+                                      params=params)
 
     @staticmethod
     def serialize_response(response):
@@ -24,7 +26,8 @@ class WeatherPublicAPI:
         return ''.join([base_str.format(
             datetime=item['dt_txt'],
             weather=item['weather'][0]['description'].capitalize(),
-            temp=str(int(round(item['main']['temp'] - 273))) + ' \xb0C',
+            temp=str(int(round(item['main']['temp'] - 273))) +
+                u' \xb0C'.encode('utf-8'),
             p=str(item['main']['pressure']) + ' Pa')
                 for item in applicable_data]
         )

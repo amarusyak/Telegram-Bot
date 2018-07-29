@@ -10,7 +10,9 @@ class TransportInfoAPI:
 
     def get_stop_info(self, stop_code):
         params = {'code': stop_code}
-        response = self._client.make_call('get', self._url, params)
+        response = self._client.make_call(method='get',
+                                          request=self._url,
+                                          params=params)
         return json.loads(response)
 
     def serialize_response(self, response):

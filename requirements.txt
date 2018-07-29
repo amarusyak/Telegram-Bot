@@ -2,3 +2,5 @@ requests==2.7.0
 telebot==0.0.3
 pyTelegramBotAPI==3.6.2
 PyYAML==3.13
+curlify==2.0.1
+urllib3==1.22

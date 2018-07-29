@@ -1,14 +1,21 @@
+import sys
 import config
+
 from datetime import datetime
 from os import path, makedirs
 
 
 def log(funk):
     def inner(*args, **kwargs):
-        logger = Logger()
-        funk_name = funk.__name__
-        logger.log(funk_name)
-        funk(*args, **kwargs)
+        if '--log' in sys.argv:
+            funk_name = funk.__name__
+            func_description = (funk.__doc__ if funk.__doc__
+                                else "No Description...")
+            logger = Logger()
+            logger.log(funk_name + ': ' + func_description)
+            funk(*args, **kwargs)
+        else:
+            funk(*args, **kwargs)
     return inner
 
 

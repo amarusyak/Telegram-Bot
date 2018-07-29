@@ -11,40 +11,45 @@ bot = telebot.TeleBot(config.TELEGRAM_TOKEN)
 api_client = Client()
 
 
-# Handle '/start'
 @bot.message_handler(commands=['start'])
 @log
 def send_welcome(message):
+    """
+    Handle '/start'; Sends a welcome message
+    """
     bot.send_message(message.chat.id,
                      "Hi there! I am a simple bot that is going to help you "
                      "with some trivial, but really helpful tasks :)\n"
                      "Please, send '/help' to get a list of a valid commands.")
 
 
-# Handle '/help'
 @bot.message_handler(commands=['help'])
 @log
 def send_instructions(message):
+    """
+    Handle '/help'; List of a valid commands for this bot
+    """
     bot.send_message(message.chat.id, '\n'.join(
         [key + ': ' + config.ENDPOINTS[key] for key in config.ENDPOINTS]))
 
 
-# Handle '/kurs'
 @bot.message_handler(commands=['kurs'])
 @log
 def show_exchange_rate(message):
+    """
+    Handle '/kurs'; Current exchange rate (USD, EUR, RUR, BTC)
+    """
     privatbank_api = BankPublicAPI(api_client)
     response = privatbank_api.get_current_courses()
     bot.reply_to(message, "(c) Privat Bank\n\n" +
                  privatbank_api.serialize_response(response))
 
 
-# Handle '/weather'
-@log
 @bot.message_handler(commands=['weather'])
+@log
 def show_weather(message):
     """
-    Message example - "/weather in <city>"
+    Handle '/weather'; Message example - "/weather in <city>"
     """
     city = message.text[12:]
     if not city:
@@ -61,10 +66,13 @@ def show_weather(message):
         bot.reply_to(message, weather_api.serialize_response(response))
 
 
-# Handle '/stopinfo'
 @bot.message_handler(commands=['stopinfo'])
 @log
-def show_exchange_rate(message):
+def show_stop_info(message):
+    """
+    Handle '/stopinfo'; Shows information about all vehicles
+        that will arrive on certain stop
+    """
     stop = message.text[10:]
     if not stop:
         bot.reply_to(message, "Warning: Enter stop code!")
@@ -77,10 +85,12 @@ def show_exchange_rate(message):
         bot.reply_to(message, t_info.serialize_response(response))
 
 
-# Handle all other messages
 @bot.message_handler(func=lambda message: True, content_types=['text'])
 @log
 def echo_message(message):
+    """
+    Handle all other messages (that are not an actual commands)
+    """
     bot.reply_to(message, "Incorrect command. "
                           "Use '/help' to list a valid commands for this bot.")
 
